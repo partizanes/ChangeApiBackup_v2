@@ -8,7 +8,6 @@ EMAIL_FROM    = 'user@server'
 MAIL_TO       = ['user@server', 'user@server']
 SMTP_SERVER   = 'localhost'
 
-
 # 1 - Full copy (rsync)
 # 0 - Only changes (cloudlinux changeApi)
 days = {

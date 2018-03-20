@@ -23,6 +23,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChangeApiBackup_v2.py" />
+    <Compile Include="const.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="log.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ssh.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="ChangeApiBackup\">
@@ -34,6 +43,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -7,4 +7,3 @@ class cpanelAccount(object):
         self.partition = partition
         self.suspended = suspended
         self.uid       = uid
-

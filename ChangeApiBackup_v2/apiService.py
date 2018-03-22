@@ -11,6 +11,8 @@ from mail import alertToSupport
 
 def getAccountsDict():
     try:
+      mainLog.info("[getAccountsDict] Получаем список аккаунтов с whmapi1...")
+
       command = 'whmapi1 listaccts want=user,uid,partition,suspended'
       process = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       output, error = process.communicate()
@@ -41,8 +43,9 @@ def getAccountsDict():
               cpanelAccountsDict[partition][user].append(cpanelAccount(user, partition, suspended, uid))
 
           except Exception as exc:
-              mainLog.error('[LineParse] {0}'.format(line))
               pass
+      
+      mainLog.info("[getAccountsDict] Найдено {0} аккаунтов".format(len(cpanelAccountsDict)))
 
       return cpanelAccountsDict
 

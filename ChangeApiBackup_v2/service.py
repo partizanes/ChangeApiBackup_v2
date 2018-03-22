@@ -5,15 +5,17 @@ import os, sys, time
 
 from log import mainLog
 from datetime import datetime
+from multiprocessing import Process
 from external import createHardlinkCopy, lastBackupExits
 from internal import runCommand, runCommandWithAnswer, getCurrentDate, createFilesList
 from changeApi import getListOfChangedFiles
-from const import days ,LOCAL_DIST, REMOTE_SERVER, SSH_DIST
-from multiprocessing import Process
 from statistic import process_item, getTotalAccount, updateUserReport
+
+from const import days , LOCAL_DIST, REMOTE_SERVER, SSH_DIST
 
 #### PKGACCT ####
 def runPkgAcct(account):
+    """ Return bool result of operation"""
     startTime = datetime.now()
     mainLog.debug('[runPkgAcct][{0}] Поток запущен'.format(account.user))
 
@@ -48,10 +50,6 @@ def runRsyncWithFilesList(account):
         filesListPath = '{0}/fileslist/{1}/{2}'.format(startPath, getCurrentDate(), account.user)
         cmd = 'rsync -a --files-from={0} /{1}/{2}/ {4}:/backup3/s8_fcapi/{3}/{2}/homedir/'.format(
             filesListPath, account.partition, account.user,  getCurrentDate(), REMOTE_SERVER)
-            
-        #mainLog.info('[runRsyncWithFilesList][command] {0}'.format(command))
-        #process = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #output, error = process.communicate()
 
         answer = runCommandWithAnswer(cmd)
 
@@ -62,7 +60,6 @@ def runRsyncWithFilesList(account):
 ###############
 
 def runChangeApiRsync(account):
-    # account is cpanelPartition(user,suspended,uid) 
     startTime = datetime.now()
     mainLog.debug('[runChangeApiRsync][{0}] Поток запущен.'.format(account.user))
 
@@ -75,7 +72,6 @@ def runChangeApiRsync(account):
     # Создание списка файлов для rsync
     if(createFilesList(filesList, account)):
         runRsyncWithFilesList(account)
-        #TODO удаление файлов со списком синхронизации ?
     #else:
     #    mainLog.error('[createFilesList][{0}] Файл не был создан.'.format(account.user))
     #    # Отправить почту на support ?

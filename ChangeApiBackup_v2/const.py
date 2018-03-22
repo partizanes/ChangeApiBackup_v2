@@ -3,6 +3,7 @@
 
 REMOTE_SERVER = 'user@server'
 SSH_DIST      = 'pathToBackupDir'
+LOCAL_DIST    = 'pathToLocalDir'
 
 EMAIL_FROM    = 'user@server'
 MAIL_TO       = ['user@server', 'user@server']

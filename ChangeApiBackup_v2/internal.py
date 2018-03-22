@@ -1,21 +1,43 @@
 # -*- coding: utf-8 -*-
 # by Part!zanes 2018
 
-import os
+import os, sys, subprocess
 
+from log import mainLog
 from datetime import datetime, timedelta
+from const import REMOTE_SERVER, SSH_DIST, LOCAL_DIST
 
+### FILELIST ###
 def createFilelistDir():
-    if(not os.path.isdir('fileslist')):
-        os.mkdir('fileslist')
+    mainLog.info("[createFilelistDir] Создаем папку для временного хранения списка измененных файлов.")
 
-    path = 'fileslist/{0}'.format(getCurrentDate())
+    try:
+        if(not os.path.isdir('fileslist')):
+            os.mkdir('fileslist')
 
-    if(not os.path.isdir(path)):
-        os.mkdir(path)
+        path = 'fileslist/{0}'.format(getCurrentDate())
 
-    # TODO implement cleanup fileslist/date dirs old then 5 days
+        if(not os.path.isdir(path)):
+            os.mkdir(path)
 
+        return True
+    except Exception as exc:
+        return exc.args
+
+def createFilesList(filesList, account):
+    path = '{0}/fileslist/{1}/{2}'.format(os.path.dirname(os.path.realpath(sys.argv[0])), getCurrentDate() , account.user)
+    mainLog.debug('[createFilesList] {0}'.format(path))
+
+    try:
+        file = open(path, 'w')
+        file.write('\n'.join(filesList))
+        file.close()
+        return True
+
+    except Exception as exc:
+        mainLog.error('[createFilesList][{0}] {1}'.format(account.user, exc.args))
+        return False
+################
 
 ### DATETIME ###
 def getLastDate():
@@ -23,4 +45,50 @@ def getLastDate():
 
 def getCurrentDate():
     return str(datetime.today()).split()[0]
+################
+
+### COMMAND ###
+def runCommand(cmd):
+    answer = os.system(cmd)
+
+    if(answer == 0):
+        return True
+
+    return False
+
+def runCommandWithAnswer(cmd, cwd='.'):
+
+    p = subprocess.Popen(cmd.split(), cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+
+    return ({'success': True if p.returncode == 0 else False , 'out': out.decode("utf-8"), 'err': err.decode("utf-8")})
+################
+
+### MOUNT ###
+def mountOverSSH():
+    mainLog.info("[mountOverSSH] Монтируем sshfs раздел.")
+
+    answer = runCommandWithAnswer('sshfs {REMOTE_SERVER}:{SSH_DIST} {LOCAL_DIST}'.format(REMOTE_SERVER=REMOTE_SERVER, SSH_DIST=SSH_DIST, LOCAL_DIST=LOCAL_DIST))
+
+    if(answer['success']):
+        mainLog.info("[mountOverSSH] sshfs смонтирован.")
+        return True
+    elif('mountpoint is not empty' in answer['err']):
+        mainLog.warning("[mountOverSSH] sshfs уже смонтирован.")
+        return True
+    else:
+        mainLog.error("[mountOverSSH][Exception] {0}".format(answer))
+        exit()
+
+def umountOverSSH():
+    mainLog.info("[mountOverSSH] Размонтируем sshfs раздел.")
+
+    answer = runCommandWithAnswer('umount {LOCAL_DIST}'.format(LOCAL_DIST=LOCAL_DIST))
+
+    if(answer['success']):
+        mainLog.info("[mountOverSSH] sshfs размонтирован.")
+        return True
+    else:
+        mainLog.error("[mountOverSSH][ERROR] {0}".format(answer))
+        return False
 ################

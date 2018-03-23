@@ -81,14 +81,14 @@ def mountOverSSH():
         exit()
 
 def umountOverSSH():
-    mainLog.info("[mountOverSSH] Размонтируем sshfs раздел.")
+    mainLog.info("[umountOverSSH] Размонтируем sshfs раздел.")
 
     answer = runCommandWithAnswer('umount {LOCAL_DIST}'.format(LOCAL_DIST=LOCAL_DIST))
 
     if(answer['success']):
-        mainLog.info("[mountOverSSH] sshfs размонтирован.")
+        mainLog.info("[umountOverSSH] sshfs размонтирован.")
         return True
     else:
-        mainLog.error("[mountOverSSH][ERROR] {0}".format(answer))
+        mainLog.error("[umountOverSSH][ERROR] {0}".format(answer))
         return False
 ################

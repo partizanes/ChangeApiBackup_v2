@@ -32,6 +32,9 @@
     <Compile Include="cpanelAccount.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="db.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="external.py">
       <SubType>Code</SubType>
     </Compile>

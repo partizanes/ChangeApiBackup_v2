@@ -15,7 +15,7 @@ class database:
     def retrieveOne(self, sql):
         cursor = self._db.execute(sql)
         answer = cursor.fetchone()
-        return (dict(answer) if answer else None)
+        return (answer if answer else None)
 
     def retrieveAll(self, sql):
         cursor = self._db.execute(sql)

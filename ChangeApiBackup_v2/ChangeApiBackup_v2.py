@@ -11,8 +11,7 @@ from external import createCurrentBackupDir
 from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
-
-from statistic import getTotalReport
+from report import cleanUpReport, getTotalReport
 
 # DEBUG TIMER START
 startTime = datetime.now()
@@ -44,10 +43,22 @@ for proc in procs:
 # TODO Архивация удаленных аккаунтов
 
 # TODO Удаленние устаревших данных резервных копий
-## TODO implement cleanup fileslist/date dirs old then 5 days
+
+# TODO implement cleanup fileslist/date dirs old then 5 days
+
+# Очистка базы данных от старых отчетов (более 5 дней)
+cleanUpReport()
 
 # Проводим размонтирование раздела sshfs
 umountOverSSH()
 
+# Считаем время исполнения скрипта
+executionTime = datetime.now() - startTime
+
+# Генерируем отчет
+report = getTotalReport(executionTime)
+
 # DEBUG TIMER END
-mainLog.info("[MAIN] Скрипт завершен. Время выполнения: {0} ".format(datetime.now() - startTime))
+mainLog.info("[MAIN] Скрипт завершен. Время выполнения: {0} ".format(executionTime))
+
+print(report)

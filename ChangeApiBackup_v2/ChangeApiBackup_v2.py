@@ -29,9 +29,6 @@ mountOverSSH()
 # Получаем список аккаунтов сгрупированных по разделу
 accountsPartitionList = getAccountsDict()
 
-# Считаем общее количество аккаунтов на всех разделах
-#setTotalAccount(sum(len(accountsPartitionList[partition]) for partition in accountsPartitionList))
-
 procs = []
 
 mainLog.info("[MAIN] Запускаем каждый найденый раздел в отдельном потоке .")

@@ -32,9 +32,7 @@
     <Compile Include="cpanelAccount.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="db.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="db.py" />
     <Compile Include="external.py">
       <SubType>Code</SubType>
     </Compile>
@@ -45,6 +43,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mail.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="report.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="service.py">

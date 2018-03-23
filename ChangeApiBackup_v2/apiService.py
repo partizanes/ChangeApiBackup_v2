@@ -44,8 +44,8 @@ def getAccountsDict():
 
           except Exception as exc:
               pass
-      
-      mainLog.info("[getAccountsDict] Найдено {0} аккаунтов".format(len(cpanelAccountsDict)))
+
+      mainLog.info("[getAccountsDict] Найдено {0} аккаунтов".format(sum(len(cpanelAccountsDict[partition]) for partition in cpanelAccountsDict)))
 
       return cpanelAccountsDict
 

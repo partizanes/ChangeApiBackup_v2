@@ -50,9 +50,6 @@
     <Compile Include="ssh.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="statistic.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="ChangeApiBackup\">

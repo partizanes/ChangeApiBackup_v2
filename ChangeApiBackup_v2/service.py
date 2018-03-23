@@ -9,7 +9,6 @@ from multiprocessing import Process
 from external import createHardlinkCopy, lastBackupExits
 from internal import runCommand, runCommandWithAnswer, getCurrentDate, createFilesList
 from changeApi import getListOfChangedFiles
-from statistic import process_item, getTotalAccount, updateUserReport
 
 from const import days , LOCAL_DIST, REMOTE_SERVER, SSH_DIST
 
@@ -76,7 +75,7 @@ def runChangeApiRsync(account):
     #    mainLog.error('[createFilesList][{0}] Файл не был создан.'.format(account.user))
     #    # Отправить почту на support ?
 
-    mainLog.debug('[runStandartRsync][{0}] Поток завершен. Затраченное время: {1}'.format(account.user, datetime.now() - startTime))
+    mainLog.debug('[runChangeApiRsync][{0}] Поток завершен. Затраченное время: {1}'.format(account.user, datetime.now() - startTime))
 
 
 def runAccountBackup(account):
@@ -84,11 +83,9 @@ def runAccountBackup(account):
     mainLog.debug('[runAccountBackup][{0}] Поток запущен.'.format(account.user))
 
     status = createHardlinkCopy(account.user)
-    updateUserReport(account.user, 'HardlinkCopy', status)
     #mainLog.error("createHardlinkCopy Status: {0}".format(status))
 
     pkgStatus = runPkgAcct(account)
-    updateUserReport(account.user, 'PkgAcct', pkgStatus)
 
     if(int(account.suspended)):
         mainLog.debug("[runAccountBackup][{0}][{1}] Аккаунт приостановлен, копирование домашней директории отменено.".format(account.user, account.suspended))
@@ -97,24 +94,22 @@ def runAccountBackup(account):
     # Копия уже существует , нету последней копии или сегодня день полной копии
     if(not status or not lastBackupExits(account.user) or days[datetime.today().strftime("%A")]):
         rsyncStatus = runStandartRsync(account)
-        updateUserReport(account.user, 'rsyncStatus', rsyncStatus)
     else:
         changeApiStatus = runChangeApiRsync(account)
-        updateUserReport(account.user, 'changeApiStatus', changeApiStatus)
 
     mainLog.debug('[runAccountBackup][{0}] Поток завершен. Затраченное время: {1}'.format(account.user, datetime.now() - startTime))
-    updateUserReport(account.user, 'executeTime', datetime.now() - startTime)
+
 
 def processingAccountData(accountsData):
     proc_count = []
 
-    #current = 0
-    #total   = len(accountsData)
+    current = 0
+    total   = len(accountsData)
 
     for account in accountsData:
-        #current += 1
+        current += 1
         
-        mainLog.debug("[{0}/{1}] [{2}] Обработка аккаунта: {3}".format(process_item(), getTotalAccount(), accountsData[account][0].partition, accountsData[account][0].user))
+        mainLog.debug("[{0}/{1}] [{2}] Обработка аккаунта: {3}".format(current, total, accountsData[account][0].partition, accountsData[account][0].user))
 
         # Запуск runAccountBackup не более 6 потоков
         while(len(proc_count) > 6):

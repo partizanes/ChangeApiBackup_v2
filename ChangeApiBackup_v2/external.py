@@ -31,5 +31,5 @@ def createHardlinkCopy(username):
         return runRemoteSshWithShell('cp -nlar {0}/{1}/{3} {0}/{2}/'.format(SSH_DIST, getLastDate(), getCurrentDate(), username, REMOTE_SERVER))
 
     elif(currentBackupExits(username)):
-        mainLog.error("POINT FALSE")
+        mainLog.info("[createHardlinkCopy][{0}] Обнаружена текущая копия, будет произведен rsync.".format(username))
         return False

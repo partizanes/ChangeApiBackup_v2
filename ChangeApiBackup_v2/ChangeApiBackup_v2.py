@@ -6,17 +6,16 @@ from multiprocessing import Process
 
 from log import mainLog
 from datetime import datetime
-from internal import createFilelistDir, mountOverSSH
+from internal import createFilelistDir, mountOverSSH, umountOverSSH
 from external import createCurrentBackupDir
 from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
 
-from statistic import appendToTotalAccount, getTotalReport
+from statistic import getTotalReport
 
 # DEBUG TIMER START
 startTime = datetime.now()
-
 
 # Создаем папку резервного копирования с текущей датой
 createCurrentBackupDir()
@@ -30,21 +29,20 @@ mountOverSSH()
 # Получаем список аккаунтов сгрупированных по разделу
 accountsPartitionList = getAccountsDict()
 
+# Считаем общее количество аккаунтов на всех разделах
+#setTotalAccount(sum(len(accountsPartitionList[partition]) for partition in accountsPartitionList))
+
 procs = []
-    
+
 mainLog.info("[MAIN] Запускаем каждый найденый раздел в отдельном потоке .")
 
 for partition in accountsPartitionList:
-
-    appendToTotalAccount(len(accountsPartitionList[partition]) + 1) 
-
     proc = Process(target=processingAccountData, args=(accountsPartitionList[partition],))
     procs.append(proc)
     proc.start()
 
 for proc in procs:
     proc.join()
-
 
 # TODO Архивация удаленных аккаунтов
 
@@ -53,9 +51,6 @@ for proc in procs:
 
 # Проводим размонтирование раздела sshfs
 umountOverSSH()
-
-# Выводим отчет
-mainLog.warning("[Report] {0}".format(getTotalReport()))
 
 # DEBUG TIMER END
 mainLog.info("[MAIN] Скрипт завершен. Время выполнения: {0} ".format(datetime.now() - startTime))

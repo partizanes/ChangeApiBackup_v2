@@ -98,3 +98,8 @@ def umountOverSSH():
         mainLog.error("[umountOverSSH][ERROR] {0}".format(answer))
         return False
 ################
+
+### DIR ###
+def getListDir(path):
+    return os.listdir(path)
+################    

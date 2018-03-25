@@ -12,6 +12,7 @@ from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
 from report import cleanUpReport, getTotalReport
+from archive import runBackupRemovedAccount
 
 # DEBUG TIMER START
 startTime = datetime.now()
@@ -40,7 +41,8 @@ for partition in accountsPartitionList:
 for proc in procs:
     proc.join()
 
-# TODO Архивация удаленных аккаунтов
+# Архивация удаленных аккаунтов
+runBackupRemovedAccount()
 
 # TODO Удаленние устаревших данных резервных копий
 

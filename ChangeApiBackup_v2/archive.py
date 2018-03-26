@@ -31,7 +31,6 @@ def getRemovedAccount():
 
 def runCreateArchive(username):
     """ Создание архива аккаунта в папку archive """
-
     startTime = datetime.now()
     mainLog.info("[runCreateArchive][{0}] Запущен процесс создания архива...".format(username))
 

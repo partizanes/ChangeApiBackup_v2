@@ -31,8 +31,8 @@ def createFilelistDir():
         return exc.args
 
 def createFilesList(filesList, account):
-    path = '{0}/fileslist/{1}/{2}'.format(os.path.dirname(os.path.realpath(sys.argv[0])), getCurrentDate() , account.user)
-    mainLog.debug('[createFilesList] {0}'.format(path))
+    path = "{0}/fileslist/{1}/{2}".format(os.path.dirname(os.path.realpath(sys.argv[0])), getCurrentDate() , account.user)
+    mainLog.debug("[createFilesList] {0}".format(path))
 
     try:
         file = open(path, 'w')
@@ -41,7 +41,7 @@ def createFilesList(filesList, account):
         return True
 
     except Exception as exc:
-        mainLog.error('[createFilesList][{0}] {1}'.format(account.user, exc.args))
+        mainLog.error("[createFilesList][{0}] {1}".format(account.user, exc.args))
         return False
 ################
 

@@ -51,6 +51,18 @@ def getTotalReport(time):
         output += "\nКоличество аккаунтов с успешно завершеной резервной копией: {0}\n\n".format(answer['COUNT(*)'])
     #########################################################################################
 
+    # Список новых аккаунтов
+    answer = db.retrieveOne("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0 AND `username` NOT IN (SELECT `username` FROM report WHERE (`date` = DATE('now', 'localtime', '-1 days')))")
+    
+    if(answer):
+        output += "\nНовые аккаунты:\n"
+
+    for row in answer:
+        userReport = dict_from_row(row)
+        output += "Username: {0: <16} pkgAcct: {1: <3} rsyncStatus: {2: <3} executeTime: {3: <3}\n".format(
+                userReport['username'], userReport['pkgAcct'], userReport['rsyncStatus'], userReport['executeTime'])
+    #########################################################################################
+
     # Получаем список аккаунтов с неудачным резервным копированием 
     answer = db.retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `rsyncStatus` = 0 AND `changeApiSync` = 0 AND `suspended` = 0")
     
@@ -65,7 +77,7 @@ def getTotalReport(time):
 
 
     # Получаем список аккаунтов для который не удалось создать предварительную hardlink копию
-    answer = db.retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0")
+    answer = db.retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0 AND `username` IN (SELECT `username` FROM report WHERE (`date` = DATE('now', 'localtime', '-1 days')))")
     
     if(answer):
         output += "\nПредварительная hardlink копия не создана или уже существует:\n"

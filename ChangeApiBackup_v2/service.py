@@ -37,7 +37,9 @@ def runStandartRsync(account):
         cmd = "/usr/bin/rsync -az  --delete . {3}:{1}/{2}/{0}/homedir/ ".format(account.user, SSH_DIST, getCurrentDate(), REMOTE_SERVER)
         answer = runCommandWithAnswer(cmd, cwd="/{0}/{1}".format(account.partition, account.user))
 
-        #mainLog.info("[runStandartRsync][command] {0} [answer] {1}".format(cmd, answer))
+        if(not answer['success']):
+            mainLog.error("[runStandartRsync][command] {0} [answer] {1}".format(cmd, answer))
+
         mainLog.debug("[runStandartRsync][{0}] Поток завершен. Статус: {2}. Затраченное время: {1}".format(account.user, datetime.now() - startTime, answer['success']))
 
         #return answer['success']

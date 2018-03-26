@@ -7,7 +7,7 @@ from multiprocessing import Process
 from log import mainLog
 from datetime import datetime
 from internal import createFilelistDir, mountOverSSH, umountOverSSH
-from external import createCurrentBackupDir
+from external import createCurrentBackupDir, createArchiveDir
 from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
@@ -42,6 +42,7 @@ for proc in procs:
     proc.join()
 
 # Архивация удаленных аккаунтов
+createArchiveDir()
 runBackupRemovedAccount()
 
 # TODO Удаленние устаревших данных резервных копий

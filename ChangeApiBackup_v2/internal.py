@@ -101,5 +101,9 @@ def umountOverSSH():
 
 ### DIR ###
 def getListDir(path):
-    return os.listdir(path)
+    if(os.path.isdir(path)):
+        return os.listdir(path)
+
+    mainLog.error("[getListDir][EXCEPTION] Директория недоступна:".format(path))
+    return []
 ################    

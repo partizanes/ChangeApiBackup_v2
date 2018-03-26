@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 # by Part!zanes 2018
 
+import os
+
 from log import mainLog
 from ssh import runRemoteSshWithShell
-from const import SSH_DIST, REMOTE_SERVER
+from const import SSH_DIST, LOCAL_DIST, REMOTE_SERVER
 from internal import getCurrentDate, getLastDate
 
 
@@ -32,4 +34,11 @@ def createHardlinkCopy(username):
 
     elif(currentBackupExits(username)):
         mainLog.info("[createHardlinkCopy][{0}] Обнаружена текущая копия, будет произведен rsync.".format(username))
-        return False
+        
+    return False
+
+def createArchiveDir():
+    archiveDirPath = "{0}/archive".format(LOCAL_DIST)
+    
+    if(not os.path.isdir(archiveDirPath)):
+        os.mkdir(archiveDirPath)

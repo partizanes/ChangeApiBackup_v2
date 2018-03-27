@@ -27,7 +27,7 @@ def runCleanupOldBackups():
 
             if(more_five_days > backup_timestamp):
                 mainLog.error("[runCleanupOldBackups] Директория будет удалена: {0}/{1}".format(SSH_DIST, dateStr))
-                answer = runRemoteSshWithShellAnswer("rm -rf {0}/{1}".format(SSH_DIST, dateStr))
+                answer = runRemoteSshWithShellAnswer("rm -rf {0}/{1} &".format(SSH_DIST, dateStr))
 
                 mainLog.debug(answer)
         return True

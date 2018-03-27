@@ -10,7 +10,7 @@ from ssh import runRemoteSshWithShellAnswer
 ### CLEANUP ###
 def runCleanupOldBackups():
     answer = runRemoteSshWithShellAnswer("ls {0}".format(SSH_DIST))
-    mainLog.debug("[runCleanupOldBackups][answer] {0}".format(answer))
+    #mainLog.debug("[runCleanupOldBackups][answer] {0}".format(answer))
 
     if(answer['success']):
         listBackup = [str for str in answer['out'].splitlines() if re.match(r'\d{4}-\d\d-\d\d', str)]
@@ -27,7 +27,7 @@ def runCleanupOldBackups():
 
             if(more_five_days > backup_timestamp):
                 mainLog.error("[runCleanupOldBackups] Директория будет удалена: {0}/{1}".format(SSH_DIST, dateStr))
-                answer = runRemoteSshWithShellAnswer("rm -rf {0}/{1} &".format(SSH_DIST, dateStr))
+                answer = runRemoteSshWithShellAnswer("nohup ionice -c3 rm -rf {0}/{1} > /dev/null 2>&1 &".format(SSH_DIST, dateStr))
 
                 mainLog.debug(answer)
         return True

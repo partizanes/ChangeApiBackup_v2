@@ -7,12 +7,13 @@ from multiprocessing import Process
 from log import mainLog
 from datetime import datetime
 from internal import createFilelistDir, mountOverSSH, umountOverSSH
-from external import createCurrentBackupDir, createArchiveDir
+from external import createCurrentBackupDir
 from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
 from report import cleanUpReport, getTotalReport
 from archive import runBackupRemovedAccount
+from cleanup import runCleanupOldBackups
 
 # DEBUG TIMER START
 startTime = datetime.now()
@@ -42,10 +43,10 @@ for proc in procs:
     proc.join()
 
 # Архивация удаленных аккаунтов
-createArchiveDir()
 runBackupRemovedAccount()
 
-# TODO Удаленние устаревших данных резервных копий
+# Удаленние устаревших данных резервных копий
+runCleanupOldBackups()
 
 # TODO implement cleanup fileslist/date dirs old then 5 days
 

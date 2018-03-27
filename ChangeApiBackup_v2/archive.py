@@ -6,6 +6,7 @@ import os, socket
 from log import mainLog
 from const import LOCAL_DIST
 from datetime import datetime
+from external import createArchiveDir
 from internal import getListDir, getLastDate, getCurrentDate
 
 hostname = socket.gethostname().split('.')[0]
@@ -47,6 +48,8 @@ def runCreateArchive(username):
     
 
 def runBackupRemovedAccount():
+    createArchiveDir()
+
     listRemovedAccount = getRemovedAccount()
 
     mainLog.info("[runBackupRemovedAccount] Обнаружено {0} удаленных аккаунтов для архивации.".format(len(listRemovedAccount)))

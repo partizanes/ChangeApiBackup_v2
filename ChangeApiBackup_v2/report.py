@@ -28,10 +28,18 @@ db.sql_do("""
 """)
 
 def createUserReport(username):
-    db.sql_do("INSERT OR IGNORE INTO {0} VALUES (DATE('now','localtime'), '{1}', 0, 0, 0, 0, 0, 0)".format(DBTABLE, username))
+    try:
+        db.sql_do("INSERT OR IGNORE INTO {0} VALUES (DATE('now','localtime'), '{1}', 0, 0, 0, 0, 0, 0)".format(DBTABLE, username))
+    except Exception as exc:
+        mainLog.error("[createUserReport][Exception] {0}".format(exc.args))
+        return createUserReport(username)
 
 def updateUserReport(username, key, value):
-    db.sql_do("UPDATE {0} SET {1} = {2} where `date` = DATE('now','localtime') and username = '{3}'".format(DBTABLE, key, value, username))
+    try:
+        db.sql_do("UPDATE {0} SET {1} = {2} where `date` = DATE('now','localtime') and username = '{3}'".format(DBTABLE, key, value, username))
+    except Exception as exc:
+        mainLog.error("[updateUserReport][Exception] {0}".format(exc.args))
+        return updateUserReport(username, key, value)
 
 def cleanUpReport():
     #print(db.retrieveAll("SELECT * FROM report WHERE (`date` <= DATE('now', 'localtime', '-5 days'))"))
@@ -52,7 +60,7 @@ def getTotalReport(time):
     #########################################################################################
 
     # Список новых аккаунтов
-    answer = db.retrieveOne("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0 AND `username` NOT IN (SELECT `username` FROM report WHERE (`date` = DATE('now', 'localtime', '-1 days')))")
+    answer = db.retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0 AND `username` NOT IN (SELECT `username` FROM report WHERE (`date` = DATE('now', 'localtime', '-1 days')))")
     
     if(answer):
         output += "\nНовые аккаунты:\n"

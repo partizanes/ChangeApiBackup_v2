@@ -76,7 +76,7 @@ def runChangeApiRsync(account):
 
     if(len(filesList) == 0):
         mainLog.warning("[runChangeApiRsync][{0}] Файлов для синхронизации не обнаружено.".format(account.user))
-        return
+        return True
 
     # Создание списка файлов для rsync
     if(createFilesList(filesList, account)):

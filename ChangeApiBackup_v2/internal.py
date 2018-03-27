@@ -5,7 +5,7 @@ import os, sys, subprocess
 
 from log import mainLog
 from datetime import datetime, timedelta
-from const import REMOTE_SERVER, SSH_DIST, LOCAL_DIST, DBDIR
+from const import REMOTE_SERVER, FILELIST_DIR, SSH_DIST, LOCAL_DIST, DBDIR
 
 ### DATABASE ###
 def createDatebaseDir():
@@ -18,10 +18,10 @@ def createFilelistDir():
     mainLog.info("[createFilelistDir] Создаем папку для временного хранения списка измененных файлов.")
 
     try:
-        if(not os.path.isdir('fileslist')):
-            os.mkdir('fileslist')
+        if(not os.path.isdir(FILELIST_DIR)):
+            os.mkdir(FILELIST_DIR)
 
-        path = 'fileslist/{0}'.format(getCurrentDate())
+        path = '{0}/{1}'.format(FILELIST_DIR, getCurrentDate())
 
         if(not os.path.isdir(path)):
             os.mkdir(path)
@@ -31,7 +31,7 @@ def createFilelistDir():
         return exc.args
 
 def createFilesList(filesList, account):
-    path = "{0}/fileslist/{1}/{2}".format(os.path.dirname(os.path.realpath(sys.argv[0])), getCurrentDate() , account.user)
+    path = "{0}/{3}/{1}/{2}".format(os.path.dirname(os.path.realpath(sys.argv[0])), getCurrentDate() , account.user, FILELIST_DIR)
     mainLog.debug("[createFilesList] {0}".format(path))
 
     try:

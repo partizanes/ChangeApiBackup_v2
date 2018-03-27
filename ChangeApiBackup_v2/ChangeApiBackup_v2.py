@@ -13,7 +13,7 @@ from service import processingAccountData
 from mail import alertToSupport
 from report import cleanUpReport, getTotalReport
 from archive import runBackupRemovedAccount
-from cleanup import runCleanupOldBackups
+from cleanup import runCleanupOldBackups, runCleanupFilelist
 
 # DEBUG TIMER START
 startTime = datetime.now()
@@ -48,7 +48,8 @@ runBackupRemovedAccount()
 # Удаленние устаревших данных резервных копий
 runCleanupOldBackups()
 
-# TODO implement cleanup fileslist/date dirs old then 5 days
+# Удаление устаревших списков файлов для rsync
+runCleanupFilelist()
 
 # Очистка базы данных от старых отчетов (более 5 дней)
 cleanUpReport()

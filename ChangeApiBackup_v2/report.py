@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # by Part!zanes 2018
 
+from time import sleep
+
 from log import mainLog
 from db import database
 from const import DBPATH, DBTABLE
@@ -32,6 +34,7 @@ def createUserReport(username):
         db.sql_do("INSERT OR IGNORE INTO {0} VALUES (DATE('now','localtime'), '{1}', 0, 0, 0, 0, 0, 0)".format(DBTABLE, username))
     except Exception as exc:
         mainLog.error("[createUserReport][Exception] {0}".format(exc.args))
+        sleep(5)
         return createUserReport(username)
 
 def updateUserReport(username, key, value):
@@ -39,6 +42,7 @@ def updateUserReport(username, key, value):
         db.sql_do("UPDATE {0} SET {1} = {2} where `date` = DATE('now','localtime') and username = '{3}'".format(DBTABLE, key, value, username))
     except Exception as exc:
         mainLog.error("[updateUserReport][Exception] {0}".format(exc.args))
+        sleep(5)
         return updateUserReport(username, key, value)
 
 def cleanUpReport():

@@ -31,12 +31,7 @@ def runCleanupOldBackups():
                 #answer = runRemoteSshWithShellAnswer("nohup ionice -c3 rm -rf {0}/{1} > /dev/null 2>&1 &".format(SSH_DIST, dateStr))
 
                 #alternative faster way
-                cmd = """
-                rm -rf /tmp/ZHsk28q0X3PzMF3;
-                mkdir /tmp/ZHsk28q0X3PzMF3;
-                nohup ionice -c3 rsync -a --delete /tmp/ZHsk28q0X3PzMF3/ {0}/{1}/ > /dev/null 2>&1;
-                rm -rf /{1} &
-                """.format(SSH_DIST, dateStr)
+                cmd = "rm -rf /tmp/ZHsk28q0X3PzMF3 && mkdir /tmp/ZHsk28q0X3PzMF3 && nohup ionice -c3 rsync -a --delete /tmp/ZHsk28q0X3PzMF3/ {0}/{1}/ > /dev/null 2>&1 && rm -rf /{1} &".format(SSH_DIST, dateStr)
 
                 answer = runRemoteSshWithShellAnswer(cmd)
                 mainLog.debug(answer)

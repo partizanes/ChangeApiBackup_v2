@@ -53,7 +53,7 @@ def getTotalReport(time):
     output = "Дата отчета: {0}. Время выполения: {1}  \n".format(getCurrentDate(), time)
 
     # Получаем список аккаунтов с успешным копированием 
-    answer = db.retrieveOne("SELECT COUNT(*) FROM report WHERE (`date` = DATE('now', 'localtime')) AND (`rsyncStatus` = 1 OR `changeApiSync` = 1) AND `hardlinkCopy` = 1 AND `pkgAcct` = 1")
+    answer = db.retrieveOne("SELECT COUNT(*) FROM report WHERE (`date` = DATE('now', 'localtime')) AND (`rsyncStatus` = 1 OR `changeApiSync` = 1 OR `suspended` = 1) AND `hardlinkCopy` = 1 AND `pkgAcct` = 1")
     
     if(answer):
         output += "\nКоличество аккаунтов с успешно завершеной резервной копией: {0}\n\n".format(answer['COUNT(*)'])

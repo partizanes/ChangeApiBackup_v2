@@ -55,7 +55,7 @@ def runRsyncWithFilesList(account):
     try:
         startPath = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-        filesListPath = "{0}/{1}/{2}/{3}".format(startPath,FILELIST_DIR getCurrentDate(), account.user, )
+        filesListPath = "{0}/{1}/{2}/{3}".format(startPath, FILELIST_DIR, getCurrentDate(), account.user, )
         cmd = "rsync -a --files-from={0} /{1}/{2}/ {4}:{5}/{3}/{2}/homedir/".format(
             filesListPath, account.partition, account.user,  getCurrentDate(), REMOTE_SERVER, SSH_DIST)
 

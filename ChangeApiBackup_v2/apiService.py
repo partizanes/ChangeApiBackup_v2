@@ -13,7 +13,7 @@ def getAccountsDict():
     try:
       mainLog.info("[getAccountsDict] Получаем список аккаунтов с whmapi1...")
 
-      command = "whmapi1 listaccts want=user,uid,partition,suspended"
+      command = "/sbin/whmapi1 listaccts want=user,uid,partition,suspended"
       process = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       output, error = process.communicate()
 
@@ -51,5 +51,5 @@ def getAccountsDict():
 
     except Exception as exc:
         mainLog.error("[{0}][getAccountsDict][Exception] {1} ".format(REMOTE_SERVER, exc.args))
-        alertToSupport("[{0}][getAccountsDict]","[Exception] {1} ".format(REMOTE_SERVER, exc.args))
+        alertToSupport("[{0}][getAccountsDict]".format(REMOTE_SERVER), "[Exception] {0} ".format(exc.args))
         exit()

@@ -16,11 +16,10 @@ def runRemoteSshWithShell(subcmd):
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = p.communicate()
 
-    mainLog.debug("[runRemoteSshWithShell] {0}".format({'success': True if p.returncode == 0 else False , 'out': out.decode("utf-8"), 'err': err.decode("utf-8"), 'cmd': cmd}))
-
     if(p.returncode == 0):
         return True
     
+    #mainLog.debug("[runRemoteSshWithShell] {0}".format({'success': True if p.returncode == 0 else False , 'out': out.decode("utf-8"), 'err': err.decode("utf-8"), 'cmd': cmd}))
     return False
 
 def runRemoteSshWithShellAnswer(subcmd):
@@ -33,7 +32,8 @@ def runRemoteSshWithShellAnswer(subcmd):
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = p.communicate()
 
-    #mainLog.debug("[runRemoteSshWithShell] {0}".format({'success': True if p.returncode == 0 else False , 'out': out.decode("utf-8"), 'err': err.decode("utf-8"), 'cmd': cmd}))
+
+    mainLog.debug("[runRemoteSshWithShell] {0}".format({'success': True if p.returncode == 0 else False , 'out': out.decode("utf-8"), 'err': err.decode("utf-8"), 'cmd': cmd}))
 
     return ({'success': True if p.returncode == 0 else False , 'out': out.decode("utf-8"), 'err': err.decode("utf-8")})
     #if(p.returncode == 0):

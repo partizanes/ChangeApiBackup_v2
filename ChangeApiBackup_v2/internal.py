@@ -9,8 +9,10 @@ from const import REMOTE_SERVER, FILELIST_DIR, SSH_DIST, LOCAL_DIST, DBDIR
 
 ### DATABASE ###
 def createDatebaseDir():
-    if(not os.path.isdir(DBDIR)):
-        os.mkdir(DBDIR)
+    path = "{0}/{1}".format(os.path.dirname(os.path.realpath(sys.argv[0])), DBDIR)
+
+    if(not os.path.isdir(path)):
+        os.mkdir(path)
 ################
 
 ### FILELIST ###
@@ -18,13 +20,16 @@ def createFilelistDir():
     mainLog.info("[createFilelistDir] Создаем папку для временного хранения списка измененных файлов.")
 
     try:
-        if(not os.path.isdir(FILELIST_DIR)):
-            os.mkdir(FILELIST_DIR)
 
-        path = '{0}/{1}'.format(FILELIST_DIR, getCurrentDate())
+        pathToFilelist = "{0}/{1}".format(os.path.dirname(os.path.realpath(sys.argv[0])), FILELIST_DIR)
 
-        if(not os.path.isdir(path)):
-            os.mkdir(path)
+        if(not os.path.isdir(pathToFilelist)):
+            os.mkdir(pathToFilelist)
+
+        pathToFilelistCurrenttDate = '{0}/{1}/{2}'.format(os.path.dirname(os.path.realpath(sys.argv[0])), FILELIST_DIR, getCurrentDate())
+
+        if(not os.path.isdir(pathToFilelistCurrenttDate)):
+            os.mkdir(pathToFilelistCurrenttDate)
 
         return True
     except Exception as exc:

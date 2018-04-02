@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # by Part!zanes 2018
 
+import os,sys
+
 REMOTE_SERVER = 'user@server'
 SSH_DIST      = 'pathToBackupDir'
 LOCAL_DIST    = 'pathToLocalDir'
@@ -12,7 +14,7 @@ MAIL_TO       = ['user@server', 'user@server']
 SMTP_SERVER   = 'localhost'
 
 DBDIR         = 'db'
-DBPATH        = './{0}/backup.db'.format(DBDIR)
+DBPATH        = '{0}/{1}/backup.db'.format(os.path.dirname(os.path.realpath(sys.argv[0])), DBDIR)
 DBTABLE       = 'report'
 
 # 1 - Full copy (rsync)

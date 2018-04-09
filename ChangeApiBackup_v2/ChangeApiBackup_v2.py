@@ -58,7 +58,7 @@ cleanUpReport()
 umountOverSSH()
 
 # Считаем время исполнения скрипта
-executionTime = datetime.now() - 
+executionTime = datetime.now() - startTime
 
 # DEBUG TIMER END
 mainLog.info("[MAIN] Скрипт завершен. Время выполнения: {0} ".format(executionTime))

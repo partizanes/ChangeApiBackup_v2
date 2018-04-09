@@ -63,10 +63,10 @@ def getTotalReport(time):
     if(answer):
         output += "\nНовые аккаунты:\n"
 
-    for row in answer:
-        userReport = dict_from_row(row)
-        output += "Username: {0: <16} pkgAcct: {1: <3} rsyncStatus: {2: <3} executeTime: {3: <3}\n".format(
-                userReport['username'], userReport['pkgAcct'], userReport['rsyncStatus'], userReport['executeTime'])
+        for row in answer:
+            userReport = dict_from_row(row)
+            output += "Username: {0: <16} pkgAcct: {1: <3} rsyncStatus: {2: <3} executeTime: {3: <3}\n".format(
+                    userReport['username'], userReport['pkgAcct'], userReport['rsyncStatus'], userReport['executeTime'])
     #########################################################################################
 
     # Получаем список аккаунтов с неудачным резервным копированием 

@@ -12,7 +12,7 @@ from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
 from report import cleanUpReport, getTotalReport
-from archive import runBackupRemovedAccount
+from archive import runBackupRemovedAccount, runRemoveOutdateArchive
 from cleanup import runCleanupOldBackups, runCleanupFilelist
 
 # DEBUG TIMER START
@@ -44,6 +44,9 @@ for proc in procs:
 
 # Архивация удаленных аккаунтов
 runBackupRemovedAccount()
+
+# Удаление устаревших архивов (более 6 месяцев)
+runRemoveOutdateArchive()
 
 # Удаленние устаревших данных резервных копий
 runCleanupOldBackups()

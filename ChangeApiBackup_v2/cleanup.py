@@ -28,12 +28,12 @@ def runCleanupOldBackups():
 
             if(more_five_days > backup_timestamp):
                 mainLog.error("[runCleanupOldBackups] Директория будет удалена: {0}/{1}".format(SSH_DIST, dateStr))
-                #answer = runRemoteSshWithShellAnswer("nohup ionice -c3 rm -rf {0}/{1} > /dev/null 2>&1 &".format(SSH_DIST, dateStr))
+                answer = runRemoteSshWithShellAnswer("nohup ionice -c3 rm -rf {0}/{1} > /dev/null 2>&1 &".format(SSH_DIST, dateStr))
 
                 #alternative faster way
-                cmd = "rm -rf /tmp/ZHsk28q0X3PzMF3 && mkdir /tmp/ZHsk28q0X3PzMF3 && nohup ionice -c3 rsync -a --delete /tmp/ZHsk28q0X3PzMF3/ {0}/{1}/ > /dev/null 2>&1 && rm -rf /{1} &".format(SSH_DIST, dateStr)
-
-                answer = runRemoteSshWithShellAnswer(cmd)
+                #cmd = "rm -rf /tmp/ZHsk28q0X3PzMF3 && mkdir /tmp/ZHsk28q0X3PzMF3 && nohup ionice -c3 rsync -a --delete /tmp/ZHsk28q0X3PzMF3/ {0}/{1}/ > /dev/null 2>&1 && rm -rf /{1} &".format(SSH_DIST, dateStr)
+                #answer = runRemoteSshWithShellAnswer(cmd)
+                
                 mainLog.debug(answer)
         return True
     else:

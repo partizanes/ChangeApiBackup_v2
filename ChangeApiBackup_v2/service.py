@@ -76,7 +76,7 @@ def runChangeApiRsync(account):
 
     if(len(filesList) == 0):
         mainLog.warning("[runChangeApiRsync][{0}] Файлов для синхронизации не обнаружено.".format(account.user))
-        return True
+        return False
 
     # Создание списка файлов для rsync
     if(createFilesList(filesList, account)):
@@ -113,6 +113,11 @@ def runAccountBackup(account):
         else:
             changeApiStatus = runChangeApiRsync(account)
             updateUserReport(account.user, 'changeApiSync', int(changeApiStatus))
+            
+            # Запускаем стандартный rsync в случае наличия проблем с changeApi
+            if(not changeApiStatus):
+                rsyncStatus = runStandartRsync(account)
+                updateUserReport(account.user, 'rsyncStatus', int(rsyncStatus))
 
         updateUserReport(account.user, 'executeTime', (datetime.now() - startTime).total_seconds())
         mainLog.debug("[runAccountBackup][{0}] Поток завершен. Затраченное время: {1}".format(account.user, datetime.now() - startTime))

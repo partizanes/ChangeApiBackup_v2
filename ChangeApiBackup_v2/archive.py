@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # by julsi9 2018
 
-import os, socket
+import os, re, time, socket 
 
 from log import mainLog
 from const import LOCAL_DIST
@@ -60,14 +60,13 @@ def runBackupRemovedAccount():
 
 def runRemoveOutdateArchive():
     """ Удаление архивов старше 6 месяцев """
-    listBackupArchive = [file for file in getListDir(SSH_DIST) if re.match('^\w+\.\w+\.\d{4}-\d{2}-\d{2}\.tar\.gz$', file)]
+    listBackupArchive = [file for file in getListDir(LOCAL_DIST) if re.match('^\w+\.\w+\.\d{4}-\d{2}-\d{2}\.tar\.gz$', file)]
 
     more_six_months = int(time.time()) - 15811200
 
     for archive in listBackupArchive:
-        archive_timestamp = int(datetime.datetime.strptime(re.search('\d{4}-\d{2}-\d{2}', archive).group(), "%Y-%m-%d").timestamp())
+        archive_timestamp = int(datetime.strptime(re.search('\d{4}-\d{2}-\d{2}', archive).group(), "%Y-%m-%d").timestamp())
+        
         if (more_six_months > archive_timestamp):
-
             os.remove("{0}/archive/{1}".format(LOCAL_DIST, archive))
             mainLog.info("[runRemoveOutdateArchive] {0}/archive/{1} удален.".format(LOCAL_DIST, archive))
-

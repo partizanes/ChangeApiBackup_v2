@@ -26,6 +26,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="archive.py" />
+    <Compile Include="changeApi.py" /> 
     <Compile Include="ChangeApiBackup_v2.py" />
     <Compile Include="cleanup.py">
       <SubType>Code</SubType>

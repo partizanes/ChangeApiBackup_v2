@@ -60,7 +60,7 @@ def runBackupRemovedAccount():
 
 def runRemoveOutdateArchive():
     """ Удаление архивов старше 6 месяцев """
-    listBackupArchive = [file for file in getListDir(LOCAL_DIST) if re.match('^\w+\.\w+\.\d{4}-\d{2}-\d{2}\.tar\.gz$', file)]
+    listBackupArchive = [file for file in getListDir("{0}/archive".format(LOCAL_DIST)) if re.match('^\w+\.\w+\.\d{4}-\d{2}-\d{2}\.tar\.gz$', file)]
 
     more_six_months = int(time.time()) - 15811200
 

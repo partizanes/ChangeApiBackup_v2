@@ -37,7 +37,7 @@ def getListOfChangedFiles(account):
                         try:
                             filesList.remove(line.replace('//deleted',''))
                         except:
-                            mainLog.error("[getListOfChangedFiles][EXCEPTION][REMOVE] fileline: {0}".format(filesList, ))
+                            #mainLog.error("[getListOfChangedFiles][EXCEPTION][REMOVE] fileline: {0}".format(filesList, ))
                             pass
                     else:
                         filesList.append(line)

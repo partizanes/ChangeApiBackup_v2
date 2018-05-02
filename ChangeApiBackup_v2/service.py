@@ -11,7 +11,7 @@ from internal import runCommand, runCommandWithAnswer, getCurrentDate, createFil
 from changeApi import getListOfChangedFiles
 from report import createUserReport, updateUserReport
 
-from const import days , LOCAL_DIST, REMOTE_SERVER, SSH_DIST, FILELIST_DIR
+from const import days, LOCAL_DIST, REMOTE_SERVER, SSH_DIST, FILELIST_DIR
 
 #### PKGACCT ####
 def runPkgAcct(account):

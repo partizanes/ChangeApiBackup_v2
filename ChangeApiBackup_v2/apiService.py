@@ -23,12 +23,10 @@ def getAccountsDict():
 
       for line in lines:
           try:
-              m = re.search(' \\\\n      partition: (.+?)\\\\n      suspended: (.+?)\\\\n      uid: (.+?)\\\\n      user: (.+?)\\\\n', line)
-
-              partition = 'hosting/home' if (m.group(1) == 'hosting') else m.group(1)
-              suspended = m.group(2)
-              uid       = m.group(3)
-              user      = m.group(4)
+              partition = 'hosting/home' if (re.search(r'partition: (.+?)\\n', line).group(1) == 'hosting') else 'hosting2'
+              suspended = re.search(r'suspended: (.+?)\\n', line).group(1)
+              uid       = re.search(r'uid: (.+?)\\n', line).group(1)
+              user      = re.search(r'user: (.+?)\\n', line).group(1)
 
               try:
                   cpanelAccountsDict[partition]

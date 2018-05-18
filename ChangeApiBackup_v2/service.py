@@ -6,7 +6,7 @@ import os, sys, time
 from log import mainLog
 from datetime import datetime
 from multiprocessing import Process
-from external import createHardlinkCopy, lastBackupExits
+from external import createHardlinkCopy, lastBackupExits, currentHomedirExits
 from internal import runCommand, runCommandWithAnswer, getCurrentDate, createFilesList
 from changeApi import getListOfChangedFiles
 from report import createUserReport, updateUserReport
@@ -101,7 +101,7 @@ def runAccountBackup(account):
         pkgStatus = runPkgAcct(account)
         updateUserReport(account.user, 'pkgAcct', int(pkgStatus))
 
-        if(int(account.suspended)):
+        if(int(account.suspended) and currentHomedirExits(account.user)):
             mainLog.debug("[runAccountBackup][{0}] Аккаунт приостановлен, копирование домашней директории отменено.".format(account.user))
             updateUserReport(account.user, 'suspended', 1)
             return

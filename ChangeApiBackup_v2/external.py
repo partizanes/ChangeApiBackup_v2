@@ -23,6 +23,9 @@ def lastBackupExits(username):
 def currentBackupExits(username):
     return runRemoteSshWithShell('stat {0}/{1}/{2}'.format(SSH_DIST, getCurrentDate(), username))
 
+def currentHomedirExits(username):
+    return runRemoteSshWithShell('stat {0}/{1}/{2}/homedir'.format(SSH_DIST, getCurrentDate(), username))
+
 # Производит копирование на удаленном сервере предыдущего дня в текущий с использованием хардлинков
 # при существовании предыдущей копии и отсутствием текущей
 # в случае наличия текущей копии возвращает False без действий

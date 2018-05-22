@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # by Part!zanes 2018
 
-import os, time
+import os, time, shutil
 
 from log import mainLog
+from mail import alertToSupport
 from datetime import datetime
 from ssh import runRemoteSshWithShell
 from const import SSH_DIST, LOCAL_DIST, REMOTE_SERVER
-from internal import getCurrentDate, getLastDate
+from internal import getCurrentDate, getLastDate, sizeof_fmt
 
 
 # Создает на удаленном сервере директорию с текущим днем
@@ -25,6 +26,27 @@ def currentBackupExits(username):
 
 def currentHomedirExits(username):
     return runRemoteSshWithShell('stat {0}/{1}/{2}/homedir'.format(SSH_DIST, getCurrentDate(), username))
+
+def checkFreeSpace():
+    disk_info = shutil.disk_usage(LOCAL_DIST)
+
+    total = disk_info[0]
+    used  = disk_info[1]
+    free  = disk_info[2]
+
+    used_perc = round(100 * used / total)
+    free_perc = round(100 * free / total)
+
+    if(free_perc < 6):
+        mainLog.error("[checkFreeSpace] Недостаточно свободного места: \nВсего: {0:>20} [100%] \nИспользовано: {1:>13} [{3}%] \nСвободно: {2:>17} [{4}%]".format
+                      (sizeof_fmt(total), sizeof_fmt(used), sizeof_fmt(free), used_perc, free_perc))
+        alertToSupport("[{0}][checkFreeSpace]".format(REMOTE_SERVER), "[checkFreeSpace] Недостаточно свободного места для проведения резервного копирования: \nВсего: {0:>19} [100%] \nИспользовано: {1:>12} [{3}%] \nСвободно: {2:>17} [{4}%]".format
+                       (sizeof_fmt(total), sizeof_fmt(used), sizeof_fmt(free), used_perc, free_perc))
+        exit()
+    else:
+        mainLog.info("[checkFreeSpace] Проверка наличия свободного места завершена успешно: \nВсего: {0:>20} [100%] \nИспользовано: {1:>13} [{3}%] \nСвободно: {2:>17} [{4}%]".format
+                     (sizeof_fmt(total), sizeof_fmt(used), sizeof_fmt(free), used_perc, free_perc))
+
 
 # Производит копирование на удаленном сервере предыдущего дня в текущий с использованием хардлинков
 # при существовании предыдущей копии и отсутствием текущей

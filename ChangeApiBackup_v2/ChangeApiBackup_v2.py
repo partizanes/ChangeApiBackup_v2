@@ -7,7 +7,7 @@ from multiprocessing import Process
 from log import mainLog
 from datetime import datetime
 from internal import createFilelistDir, mountOverSSH, umountOverSSH
-from external import createCurrentBackupDir, createAdditionalCopy
+from external import createCurrentBackupDir, createAdditionalCopy ,checkFreeSpace
 from apiService import getAccountsDict
 from service import processingAccountData
 from mail import alertToSupport
@@ -26,6 +26,9 @@ createFilelistDir()
 
 # Монтируем sshfs зависимость для pkgacct
 mountOverSSH()
+
+# Проверяем наличие свободного места на смонтированном разделе
+checkFreeSpace()
 
 # Получаем список аккаунтов сгрупированных по разделу
 accountsPartitionList = getAccountsDict()

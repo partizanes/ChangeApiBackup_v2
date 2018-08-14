@@ -32,7 +32,7 @@ def getListOfChangedFiles(account):
                     line = line.replace(prefix, '')
 
                     if('//deleted' in line):
-                        mainLog.warning("[getListOfChangedFiles] Удаляем из списка синхронизации: {0}".format(line))
+                        #mainLog.warning("[getListOfChangedFiles] Удаляем из списка синхронизации: {0}".format(line))
 
                         try:
                             filesList.remove(line.replace('//deleted',''))

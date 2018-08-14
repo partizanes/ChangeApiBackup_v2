@@ -56,6 +56,11 @@ def getLastDate():
 
 def getCurrentDate():
     return str(datetime.today()).split()[0]
+
+def getSubDayDate(day):
+    """ Возвращает дату минус количество дней"""
+    return str(datetime.today() - timedelta(days=day)).split()[0]
+
 ################
 
 ### COMMAND ###

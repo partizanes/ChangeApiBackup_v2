@@ -28,7 +28,7 @@ class database:
     @filename.setter
     def filename(self, fn):
         self._filename = fn
-        self._db = sqlite3.connect(fn)
+        self._db = sqlite3.connect(fn,timeout=30)
         self._db.row_factory = sqlite3.Row
 
     @filename.deleter

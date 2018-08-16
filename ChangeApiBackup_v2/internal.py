@@ -114,7 +114,7 @@ def getListDir(path):
     if(os.path.isdir(path)):
         return os.listdir(path)
 
-    mainLog.error("[getListDir][EXCEPTION] Директория недоступна:".format(path))
+    mainLog.error("[getListDir][EXCEPTION] Директория недоступна: {0}".format(path))
     return []
 ################    
 

@@ -73,4 +73,6 @@ executionTime = datetime.now() - startTime
 mainLog.info("[MAIN] Скрипт завершен. Время выполнения: {0} ".format(executionTime))
 
 # Генерируем отчет
-mainLog.info(getTotalReport(executionTime))
+report = getTotalReport(executionTime)
+mainLog.info(report)
+alertToSupport("Система резервного копирования", report, ["host_admins@ok.by"])

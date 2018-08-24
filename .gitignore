@@ -100,3 +100,4 @@ ENV/
 # mypy
 .mypy_cache/
 /ChangeApiBackup_v2/db
+/ChangeApiBackup_v2/ChangeApiBackup2

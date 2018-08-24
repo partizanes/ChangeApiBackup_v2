@@ -90,7 +90,7 @@ def createAdditionalCopy():
         runRemoteSshWithShell('mkdir -p {0}/weekly'.format(SSH_DIST))
 
         mainLog.info("[createAdditionalCopy] Создание hardlink недельной копии.")
-        success = runRemoteSshWithShell('cp -lr {0}/{1} {0}/weekly/ &'.format(SSH_DIST, getCurrentDate()))
+        success = runRemoteSshWithShell('cp -lr {0}/{1} {0}/weekly/'.format(SSH_DIST, getCurrentDate()))
 
         if(success):
             mainLog.info("[createAdditionalCopy] Недельная копия создана успешно.")
@@ -117,7 +117,7 @@ def createAdditionalCopy():
         runRemoteSshWithShell('mkdir -p {0}/monthly'.format(SSH_DIST))
 
         mainLog.info("[createAdditionalCopy] Создание hardlink месячной копии.")
-        success = runRemoteSshWithShell('cp -lr {0}/{1} {0}/monthly/ &'.format(SSH_DIST, getCurrentDate()))
+        success = runRemoteSshWithShell('cp -lr {0}/{1} {0}/monthly/'.format(SSH_DIST, getCurrentDate()))
 
         if(success):
             mainLog.info("[createAdditionalCopy] Месячная копия создана успешно")

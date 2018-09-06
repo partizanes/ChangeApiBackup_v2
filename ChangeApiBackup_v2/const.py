@@ -13,9 +13,12 @@ EMAIL_FROM    = 'user@server'
 MAIL_TO       = ['user@server', 'user@server']
 SMTP_SERVER   = 'localhost'
 
-DBDIR         = 'db'
-DBPATH        = '{0}/{1}/backup.db'.format(os.path.dirname(os.path.realpath(sys.argv[0])), DBDIR)
-DBTABLE       = 'report'
+DB_HOST       = 'localhost'
+DB_NAME       = 'database'
+DB_TABLE      = 'table'
+DB_USER       = 'user'
+DB_PASS       = 'password'
+DB_ENCODING   = 'utf8'
 
 # 1 - Full copy (rsync)
 # 0 - Only changes (cloudlinux changeApi)

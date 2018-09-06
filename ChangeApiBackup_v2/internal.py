@@ -5,15 +5,7 @@ import os, sys, subprocess
 
 from log import mainLog
 from datetime import datetime, timedelta
-from const import REMOTE_SERVER, FILELIST_DIR, SSH_DIST, LOCAL_DIST, DBDIR
-
-### DATABASE ###
-def createDatebaseDir():
-    path = "{0}/{1}".format(os.path.dirname(os.path.realpath(sys.argv[0])), DBDIR)
-
-    if(not os.path.isdir(path)):
-        os.mkdir(path)
-################
+from const import REMOTE_SERVER, FILELIST_DIR, SSH_DIST, LOCAL_DIST
 
 ### FILELIST ###
 def createFilelistDir():

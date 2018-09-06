@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b7708fc8-0fc4-4d90-b649-d8c8b76ef02f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>report.py</StartupFile>
+    <StartupFile>db.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -37,7 +37,9 @@
     <Compile Include="cpanelAccount.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="dbMultiThread.py" />
+    <Compile Include="db.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="external.py">
       <SubType>Code</SubType>
     </Compile>

@@ -2,61 +2,37 @@
 # by Part!zanes 2018
 
 from log import mainLog
-from const import DBTABLE
-from internal import createDatebaseDir, getCurrentDate
-from dbMultiThread import sql_do, retrieveOne, retrieveAll
+from const import DB_HOST, DB_NAME, DB_TABLE, DB_USER, DB_PASS, DB_ENCODING
+from internal import getCurrentDate
+from db import Datebase
 
-# Создаем папку для базы данных
-createDatebaseDir()
-
-# Создание структуры таблицы
-sql_do("""
-            CREATE TABLE IF NOT EXISTS `{0}` (
-	            `date`	datetime,
-	            `username`	varchar(16),
-	            `hardlinkCopy`	INTEGER DEFAULT 0,
-	            `pkgAcct`	INTEGER DEFAULT 0,
-	            `rsyncStatus`	INTEGER DEFAULT 0,
-	            `changeApiSync`	INTEGER DEFAULT 0,
-                `suspended`     INTEGER DEFAULT 0,
-	            `executeTime`	INTEGER
-            )
-""".format(DBTABLE))
+db = Datebase(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_ENCODING)
 
 def createUserReport(username):
-    try:
-        sql_do("INSERT OR IGNORE INTO {0} VALUES (DATE('now','localtime'), '{1}', 0, 0, 0, 0, 0, 0)".format(DBTABLE, username))
-    except Exception as exc:
-        mainLog.error("[createUserReport][Exception] {0}".format(exc.args))
+    db.query("INSERT IGNORE INTO {0} VALUES (CURDATE(), '{1}', 0, 0, 0, 0, 0, 0)".format(DB_TABLE, username))
 
 def updateUserReport(username, key, value):
-    try:
-        sql_do("UPDATE {0} SET {1} = {2} where `date` = DATE('now','localtime') and username = '{3}'".format(DBTABLE, key, value, username))
-    except Exception as exc:
-        mainLog.error("[updateUserReport][Exception] {0}".format(exc.args))
+    db.query("UPDATE {0} SET {1} = {2} WHERE `date` = CURDATE() AND username = '{3}'".format(DB_TABLE, key, value, username))
 
 def cleanUpReport():
     #print(retrieveAll("SELECT * FROM report WHERE (`date` <= DATE('now', 'localtime', '-5 days'))"))
     mainLog.debug("[cleanUpReport] Запускаем очистку базы данных отчетов от устаревших данных.")
     
-    sql_do("DELETE FROM report WHERE (`date` <= DATE('now', 'localtime', '-5 days'))")
-
-def dict_from_row(row):
-    return dict(zip(row.keys(), row)) 
+    db.query("DELETE FROM {0} WHERE `date` <= (CURDATE() - INTERVAL 5 DAY)".format(DB_TABLE))
 
 def getTotalReport(time):
     output = "Дата отчета: {0}. Время выполения: {1}  \n".format(getCurrentDate(), time)
 
     # Получаем список аккаунтов с успешным копированием 
-    answer = retrieveOne("SELECT COUNT(*) FROM report WHERE (`date` = DATE('now', 'localtime')) AND (`rsyncStatus` = 1 OR `changeApiSync` = 1 OR `suspended` = 1) AND `hardlinkCopy` = 1 AND `pkgAcct` = 1")
-    
+    answer = db.retrieveOne("SELECT COUNT(*) FROM {0} WHERE `date` = CURDATE() AND (`rsyncStatus` = 1 OR `changeApiSync` = 1 OR `suspended` = 1) AND `hardlinkCopy` = 1 AND `pkgAcct` = 1".format(DB_TABLE))
+
     if(answer):
         output += "\nКоличество аккаунтов с успешно завершеной резервной копией: {0}\n\n".format(answer[0])
     #########################################################################################
 
     # Список новых аккаунтов
-    answer = retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0 AND `username` NOT IN (SELECT `username` FROM report WHERE (`date` = DATE('now', 'localtime', '-1 days')))")
-    
+    answer = db.retrieveAll("SELECT * FROM {0} WHERE `date` = CURDATE() AND `hardlinkCopy` = 0 AND `username` NOT IN (SELECT `username` FROM {0} WHERE `date` = CURDATE() - INTERVAL 1 DAY)".format(DB_TABLE))
+
     if(answer):
         output += "\nНовые аккаунты:\n"
 
@@ -65,7 +41,7 @@ def getTotalReport(time):
     #########################################################################################
 
     # Получаем список аккаунтов с неудачным резервным копированием 
-    answer = retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `rsyncStatus` = 0 AND `changeApiSync` = 0 AND `suspended` = 0")
+    answer = db.retrieveAll("SELECT * FROM {0} WHERE `date` = CURDATE() AND `rsyncStatus` = 0 AND `changeApiSync` = 0 AND `suspended` = 0".format(DB_TABLE))
     
     if(answer):
         output += "\nСписок аккаунтов с неудачным резервным копированием:\n"
@@ -77,8 +53,8 @@ def getTotalReport(time):
 
 
     # Получаем список аккаунтов для который не удалось создать предварительную hardlink копию
-    answer = retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `hardlinkCopy` = 0 AND `username` IN (SELECT `username` FROM report WHERE (`date` = DATE('now', 'localtime', '-1 days')))")
-    
+    answer = db.retrieveAll("SELECT * FROM {0} WHERE `date` = CURDATE() AND `hardlinkCopy` = 0 AND `username` IN (SELECT `username` FROM report WHERE `date` = CURDATE() - INTERVAL 1 DAY)".format(DB_TABLE))
+
     if(answer):
         output += "\nПредварительная hardlink копия не создана или уже существует:\n"
         
@@ -88,15 +64,14 @@ def getTotalReport(time):
     #########################################################################################
 
     # Получаем список аккаунтов с неудачным pkgAcct
-    answer = retrieveAll("SELECT * FROM report WHERE (`date` = DATE('now', 'localtime')) AND `pkgAcct` = 0")
+    answer = db.retrieveAll("SELECT * FROM {0} WHERE `date` = CURDATE() AND `pkgAcct` = 0".format(DB_TABLE))
     
     if(answer):
         output += "\nPkgAcct завершился с ошибками:\n"
         
         for row in answer:
-            userReport = dict_from_row(row)
             output += "Username: {0: <16} hardlinkCopy: {1: <3} pkgAcct: {2: <3} rsyncStatus: {3: <3} changeApiSync: {4: <3} suspended: {5: <3} executeTime: {6: <3}\n".format(
-                userReport[1], row[2], row[3], row[4], row[5], row[6], row[7])
+                row[1], row[2], row[3], row[4], row[5], row[6], row[7])
     #########################################################################################
 
     return output
